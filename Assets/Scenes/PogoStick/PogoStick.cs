@@ -21,12 +21,15 @@ public class PogoStick : MonoBehaviour {
     void Update()
     {
         RespondToSteeringInput();
-        if (pogoStickBody.position.y <= 0)
-            UpdateJumpSequence();
     }
 
-    private void UpdateJumpSequence() {
-        var relativeForce = -pogoStickBody.position.y / _maxDepth;
+    private void OnTriggerStay(Collider other)
+    {
+        UpdateJumpSequence(other);
+    }
+
+    private void UpdateJumpSequence(Collider other) {
+        var relativeForce = -pogoStickBody.position.y /  _maxDepth;
         if (relativeForce >= 1f)
             pogoStickBody.velocity = new Vector3(pogoStickBody.velocity.x, 0, pogoStickBody.velocity.z);
         Vector3 force = pogoStickBody.mass * Physics.gravity * _springStiffness * powerMultiplier * relativeForce;
