@@ -11,11 +11,15 @@ public class PogoStick : MonoBehaviour {
     private float _maxDepth = 0.25f;
     [SerializeField]
     private float _springStiffness = 3f;
-    private float _collisionTime;
+
+    private GameObject _spring;
+    private Vector3 _collisionPoint;
 
     void Start()
     {
         pogoStickBody = GetComponent<Rigidbody>();
+
+        _spring = GameObject.Find("Spring");
     }
 
     void Update()
@@ -23,13 +27,22 @@ public class PogoStick : MonoBehaviour {
         RespondToSteeringInput();
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        UpdateJumpSequence(other);
+        powerMultiplier = 2f;
+        _collisionPoint = _spring.transform.position;
+        print(_collisionPoint.y);
     }
 
-    private void UpdateJumpSequence(Collider other) {
-        var relativeForce = -pogoStickBody.position.y /  _maxDepth;
+    private void OnTriggerStay(Collider other)
+    {
+        if (Input.GetKey(KeyCode.Space))
+            powerMultiplier++;
+        UpdateJumpSequence();
+    }
+
+    private void UpdateJumpSequence() {
+        var relativeForce = -pogoStickBody.position.y / (-_collisionPoint.y + 0.15f + _maxDepth);
         if (relativeForce >= 1f)
             pogoStickBody.velocity = new Vector3(pogoStickBody.velocity.x, 0, pogoStickBody.velocity.z);
         Vector3 force = pogoStickBody.mass * Physics.gravity * _springStiffness * powerMultiplier * relativeForce;
