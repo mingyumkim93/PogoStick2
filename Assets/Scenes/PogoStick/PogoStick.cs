@@ -29,22 +29,23 @@ public class PogoStick : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        powerMultiplier = 2f;
+        powerMultiplier = 5f;
+        UpdateJumpSequence(collision);
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        if (Input.GetKey(KeyCode.Space))
-            powerMultiplier = 5f;
         UpdateJumpSequence(collision);
     }
 
     private void UpdateJumpSequence(Collision collision) {
+        if (Input.GetKey(KeyCode.Space))
+            powerMultiplier = 10f;
         Vector3 force = pogoStickBody.mass * Physics.gravity * _springStiffness * powerMultiplier ;
         var contact = collision.contacts[0];
         var normal = contact.normal;
         force = Vector3.Dot(force, normal) * normal.normalized;
-        force = Vector3.Dot(pogoStickBody.transform.up, force) * force.normalized;
+        force = Vector3.Dot(force, pogoStickBody.transform.up) * pogoStickBody.transform.up.normalized;
         pogoStickBody.AddForce(-force);
     }
 
@@ -56,8 +57,8 @@ public class PogoStick : MonoBehaviour {
         transform.Rotate(Vector3.right, v * steeringSpeed * Time.deltaTime);
 
         if (Input.GetKey(KeyCode.LeftArrow))
-            transform.Rotate(-Vector3.up, steeringSpeed * Time.deltaTime);
+            transform.Rotate(-Vector3.up, steeringSpeed * Time.deltaTime, Space.World);
         if (Input.GetKey(KeyCode.RightArrow))
-            transform.Rotate(Vector3.up, steeringSpeed * Time.deltaTime);
+            transform.Rotate(Vector3.up, steeringSpeed * Time.deltaTime, Space.World);
     }
 }
