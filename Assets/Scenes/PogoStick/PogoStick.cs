@@ -36,13 +36,15 @@ public class PogoStick : MonoBehaviour {
     {
         if (Input.GetKey(KeyCode.Space))
             powerMultiplier = 5f;
-        UpdateJumpSequence();
+        UpdateJumpSequence(collision);
     }
-    
 
-    private void UpdateJumpSequence() {
+    private void UpdateJumpSequence(Collision collision) {
         Vector3 force = pogoStickBody.mass * Physics.gravity * _springStiffness * powerMultiplier ;
-        force = Vector3.Dot(force, pogoStickBody.transform.up) * pogoStickBody.transform.up.normalized;
+        var contact = collision.contacts[0];
+        var normal = contact.normal;
+        force = Vector3.Dot(force, normal) * normal.normalized;
+        force = Vector3.Dot(pogoStickBody.transform.up, force) * force.normalized;
         pogoStickBody.AddForce(-force);
     }
 
