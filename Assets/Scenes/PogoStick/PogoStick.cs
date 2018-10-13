@@ -27,25 +27,21 @@ public class PogoStick : MonoBehaviour {
         RespondToSteeringInput();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
         powerMultiplier = 2f;
-        _collisionPoint = _spring.transform.position;
-        print(_collisionPoint.y);
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnCollisionStay(Collision collision)
     {
         if (Input.GetKey(KeyCode.Space))
-            powerMultiplier++;
+            powerMultiplier = 5f;
         UpdateJumpSequence();
     }
+    
 
     private void UpdateJumpSequence() {
-        var relativeForce = -pogoStickBody.position.y / (-_collisionPoint.y + 0.15f + _maxDepth);
-        if (relativeForce >= 1f)
-            pogoStickBody.velocity = new Vector3(pogoStickBody.velocity.x, 0, pogoStickBody.velocity.z);
-        Vector3 force = pogoStickBody.mass * Physics.gravity * _springStiffness * powerMultiplier * relativeForce;
+        Vector3 force = pogoStickBody.mass * Physics.gravity * _springStiffness * powerMultiplier ;
         force = Vector3.Dot(force, pogoStickBody.transform.up) * pogoStickBody.transform.up.normalized;
         pogoStickBody.AddForce(-force);
     }
