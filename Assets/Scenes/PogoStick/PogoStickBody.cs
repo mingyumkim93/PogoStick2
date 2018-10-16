@@ -1,26 +1,41 @@
 ﻿using System;
 using UnityEngine;
 
-namespace PogoStick
+public class PogoStickBody : MonoBehaviour
 {
-    public class PogoStickBody : MonoBehaviour
+    [SerializeField]
+    float _steeringSpeed = 100f;
+
+    float _turningSpeed = 5f;
+    float _currentMousePos;
+    float _previousMousePos;
+
+    void Update()
     {
-        [SerializeField]
-        float _steeringSpeed = 100f;
-        
-        void Update()
+        RespondToSteeringInput();
+    }
+
+    private void RespondToSteeringInput()
+    {
+        float h = Input.GetAxis("Horizontal");
+        transform.Rotate(Vector3.back, h * _steeringSpeed * Time.deltaTime);
+        float v = Input.GetAxis("Vertical");
+        transform.Rotate(Vector3.right, v * _steeringSpeed * Time.deltaTime);
+
+        if (Input.GetMouseButtonDown(0))
         {
-            RespondToSteeringInput();
+            _previousMousePos = Input.mousePosition.x;
         }
 
-        private void RespondToSteeringInput()
+        if (Input.GetMouseButton(0))
         {
-            float h = Input.GetAxis("Horizontal");
-            transform.Rotate(Vector3.back, h * _steeringSpeed * Time.deltaTime);
-            float v = Input.GetAxis("Vertical");
-            transform.Rotate(Vector3.right, v * _steeringSpeed * Time.deltaTime);
-            float x = Input.GetAxis("Mouse X");
-            transform.Rotate(Vector3.up, x * _steeringSpeed * Time.deltaTime, Space.World);
+            _currentMousePos = Input.mousePosition.x;
+            var currentSwipe = _currentMousePos - _previousMousePos;
+            transform.Rotate(Vector3.up, currentSwipe * _turningSpeed * Time.deltaTime, Space.World);
+            _previousMousePos = _currentMousePos;
+
+
         }
+
     }
 }
