@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace PogoStick
-{
+namespace PogoStick {
     public class Spring : MonoBehaviour
     {
         [SerializeField]
@@ -15,6 +12,7 @@ namespace PogoStick
 
         private Rigidbody _pogoStickBody;
         private float _triggerEnterTime;
+        private Vector3 _velocityOnTriggerEnter;
         private bool _hasCollided;
 
         void Start()
@@ -25,6 +23,7 @@ namespace PogoStick
         private void OnTriggerEnter(Collider other)
         {
             _triggerEnterTime = Time.time;
+            _velocityOnTriggerEnter = _pogoStickBody.velocity;
             _hasCollided = false;
             _powerMultiplier = 5f;
             UpdateSqueeze(other);
@@ -42,8 +41,8 @@ namespace PogoStick
             if (_hasCollided) return;
             var gravitationalForce = _pogoStickBody.mass * Physics.gravity;
             var relativeForceMultiplier = (Time.time - _triggerEnterTime) * _springStiffness;
-            var forceBack = Vector3.Dot(gravitationalForce, _pogoStickBody.velocity.normalized)
-                * _pogoStickBody.velocity.normalized * relativeForceMultiplier;
+            var forceBack = Vector3.Dot(gravitationalForce, _velocityOnTriggerEnter.normalized)
+                * -_velocityOnTriggerEnter.normalized * relativeForceMultiplier;
             _pogoStickBody.velocity = new Vector3(0f, _pogoStickBody.velocity.y, 0f);
             _pogoStickBody.AddForce(forceBack);
         }
