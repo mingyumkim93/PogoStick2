@@ -26,7 +26,6 @@ public class Spring : MonoBehaviour
         _hasCollided = false;
         _powerMultiplier = 5f;
         UpdateSqueeze(other);
-        print("trigger");
     }
 
     private void OnTriggerStay(Collider other)
@@ -51,9 +50,7 @@ public class Spring : MonoBehaviour
     {
         _hasCollided = true;
         UpdateExpand(collision);
-        print("collision");
     }
-
     private void OnCollisionStay(Collision collision)
     {
         UpdateExpand(collision);
@@ -65,8 +62,7 @@ public class Spring : MonoBehaviour
         var forceUp = -gravitationalForce * _springStiffness * _powerMultiplier;
         var contact = collision.contacts[0];
         var normal = contact.normal;
-        var force = Vector3.Dot(forceUp, normal.normalized) * normal.normalized;
-        force = Vector3.Dot(force, _pogoStickBody.transform.up.normalized) * _pogoStickBody.transform.up.normalized;
+        var force = Vector3.Dot(forceUp, (_pogoStickBody.transform.up + normal).normalized) * (_pogoStickBody.transform.up + normal).normalized;
         _pogoStickBody.AddForce(force);
     }
 }
