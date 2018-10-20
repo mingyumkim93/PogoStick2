@@ -8,8 +8,8 @@ public class PogoStickUpperPart : MonoBehaviour {
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.name == "Terrain")
-            StartCoroutine(ReloadScene());
-    }
+            StartCoroutine(ReloadScene()); 
+    } 
 
     IEnumerator ReloadScene()
     {

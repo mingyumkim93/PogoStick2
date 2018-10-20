@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class cubeObstacle : MonoBehaviour {
+public class MovingCube : MonoBehaviour {
 
     [SerializeField] Vector3 movementVector = new Vector3(10f, 10f, 10f);
     [SerializeField] float period = 2f;
