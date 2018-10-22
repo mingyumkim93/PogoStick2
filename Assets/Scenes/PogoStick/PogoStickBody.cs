@@ -3,13 +3,12 @@ using UnityEngine;
 
 public class PogoStickBody : MonoBehaviour
 {
-    [SerializeField]
-    float _steeringSpeed = 100f;
+    [SerializeField] float _steeringSpeed = 100f;
+    [SerializeField] float _turningSpeed = 5f;
 
-    float _turningSpeed = 5f;
     float _currentMousePos;
     float _previousMousePos;
-
+    
     void Update()
     {
         RespondToSteeringInput();
@@ -33,9 +32,6 @@ public class PogoStickBody : MonoBehaviour
             var currentSwipe = _currentMousePos - _previousMousePos;
             transform.Rotate(Vector3.up, currentSwipe * _turningSpeed * Time.deltaTime, Space.World);
             _previousMousePos = _currentMousePos;
-
-
         }
-
     }
 }

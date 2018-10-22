@@ -1,13 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Spring : MonoBehaviour
 {
-    [SerializeField]
-    float _powerMultiplier = 5f;
-    [SerializeField]
-    private float _springStiffness = 5f;
-    [SerializeField]
-    GameObject _pogoStick;
+    [SerializeField] float _powerMultiplier = 5f;
+    [SerializeField] float _springStiffness = 5f;
+    [SerializeField] GameObject _pogoStick;
 
     private Rigidbody _pogoStickBody;
     private float _triggerEnterTime;
@@ -50,6 +49,9 @@ public class Spring : MonoBehaviour
     {
         _hasCollided = true;
         UpdateExpand(collision);
+
+        if (collision.gameObject.name == "Goal")
+            StartCoroutine(SuccededLevel());
     }
     private void OnCollisionStay(Collision collision)
     {
@@ -64,5 +66,11 @@ public class Spring : MonoBehaviour
         var normal = contact.normal;
         var force = Vector3.Dot(forceUp, (_pogoStickBody.transform.up + normal).normalized) * (_pogoStickBody.transform.up + normal).normalized;
         _pogoStickBody.AddForce(force);
+    }
+
+    IEnumerator SuccededLevel()
+    {
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotatingCube : MonoBehaviour {
+public class RotatingObstacle : MonoBehaviour {
     
     [SerializeField] float rotatingPeriod = 30f;
     public enum RotatingAxis {Up, Forward, Right}
