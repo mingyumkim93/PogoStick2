@@ -11,7 +11,7 @@ public class PogoStickUpperPart : MonoBehaviour {
             StartCoroutine(ReloadScene());
     }
     
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision) 
     {
          if (collision.gameObject.name == "Top")
              StartCoroutine(ReloadScene()); 
